@@ -100,7 +100,7 @@ El proyecto cumple con los **requisitos del Reglamento 128/2019**:
    - Sistema de autenticación con usuario y contraseña.
    - OAuth para Google con `django-allauth`.
 2. **Protección CSRF**:
-   - Inclusión de `{% csrf_token %}` en formularios.
+   - Inclusión de `csrf_token` en formularios.
 3. **Bloqueo de Usuarios**:
    - Uso de `django-axes` para bloquear usuarios tras intentos fallidos.
 4. **Autorización y Control de Acceso**:
