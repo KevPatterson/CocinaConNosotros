@@ -5,15 +5,6 @@
 - correr python manage.py runserver o python manage.py runsslserver
 - y luego en el navegador de internet http://127.0.0.1:8000/ o https://127.0.0.1:8000/
 
-Opcional:
-Cambiar en pyvenv.cfg el nombre de usario de tu pc en caso de que se quede como "Patterson"
-
-home = C:\Users\tu_usuario\AppData\Local\Programs\Python\Python313
-include-system-site-packages = false
-version = 3.13.0
-executable = C:\Users\tu_usuario\Desktop\.venv\Scripts\python.exe
-command = C:\Users\tu_usuario\Desktop\.venv\Scripts\python.exe -m venv C:\Users\tu_usuario\Desktop\django-notes-master\django-notes-master\.venv
-
 Credenciales: (Superusuario)
 user: admin@example.com
 pass: admin123
