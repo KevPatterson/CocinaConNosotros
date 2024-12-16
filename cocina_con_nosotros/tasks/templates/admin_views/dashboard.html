@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    display: flex;
+  }
+  /* Contenido principal */
+  .main {
+    padding: 10%;
+  }
+  .main-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .main-header h1 {
+    color: #2b2e4a;
+  }
+  .main-header p {
+    color: #6c757d;
+    font-size: 1.2rem;
+  }
+  /* Cards de información */
+  .cards {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+  }
+  .card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    flex: 1;
+    text-align: center;
+  }
+  .card h3 {
+    margin-bottom: 10px;
+    color: #2b2e4a;
+  }
+  .card p {
+    font-size: 18px;
+    color: #53354a;
+  }
+  /* Botones */
+  .action-buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+  }
+  .action-buttons a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #e84545;
+    color: #fff;
+    text-decoration: none;
+    font-size: 24px;
+    transition: background-color 0.3s;
+  }
+  .action-buttons a:hover {
+    background-color: #53354a;
+  }
+  /* Contenedor de gráfico */
+  .chart-container {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  }
+  .chart-container h3 {
+    color: #2b2e4a;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+</style>
+
+<div class="container mt-5">
+  <div class="main-header">
+    <h1>¡Hola, {{ user.username }}!</h1>
+    <p>Bienvenido a tu panel de control.</p>
+  </div>
+
+  <!-- Cards de métricas -->
+  <div class="cards">
+    <div class="card">
+      <h3>Total Recetas</h3>
+      <p>{{ total_recipes }}</p>
+    </div>
+    <div class="card">
+      <h3>Categorías</h3>
+      <p>{{ total_categories }}</p>
+    </div>
+    <div class="card">
+      <h3>Usuarios Activos</h3>
+      <p>{{ total_active_users }}</p>
+    </div>
+  </div>
+
+  <!-- Botones de acciones rápidas -->
+  <div class="action-buttons">
+    <a href="{% url 'admin_dashboard' %}" title="Panel de Control">
+      <i class="bi bi-grid"></i>
+    </a>
+    <a href="{% url 'manage_users' %}" title="Gestionar Usuarios">
+      <i class="bi bi-people"></i>
+    </a>
+    <a href="{% url 'manage_recipes' %}" title="Gestionar Recetas">
+      <i class="bi bi-card-list"></i>
+    </a>
+    <a href="{% url 'auditlog_view' %}" title="Ver Auditoría">
+      <i class="bi bi-clipboard-data"></i>
+    </a>
+  </div>
+
+  <!-- Contenedor del gráfico -->
+  <div class="chart-container">
+    <h3>Distribución de Recetas por Mes</h3>
+    <canvas id="recipesChart"></canvas>
+  </div>
+</div>
+
+<!-- Script para integrar Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  const ctx = document.getElementById('recipesChart').getContext('2d');
+  const recipesChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: {{ chart_labels|safe }},
+      datasets: [{
+        label: 'Cantidad de Recetas',
+        data: {{ chart_data|safe }},
+        fill: false,
+        borderColor: '#e84545',
+        tension: 0.1
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'top',
+        },
+      },
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: 'Meses'
+          }
+        },
+        y: {
+          title: {
+            display: true,
+            text: 'Cantidad de Recetas'
+          },
+          beginAtZero: true
+        }
+      }
+    }
+  });
+</script>
+{% endblock %}

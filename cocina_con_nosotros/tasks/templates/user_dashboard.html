@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<style>
+  #dailyInspirationCarousel {
+    background-color: #f8f9fa; /* Fondo claro para un diseño limpio */
+    border-radius: 20px;
+    overflow: hidden;
+  }
+
+  .carousel-item {
+    text-align: center; /* Centra el contenido */
+  }
+
+  .carousel-item img {
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Sombras modernas */
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .carousel-item img:hover {
+    transform: scale(1.05); /* Efecto de aumento al pasar el ratón */
+  }
+
+  .carousel-control-prev-icon,
+  .carousel-control-next-icon {
+    filter: invert(1); /* Cambia a blanco los íconos */
+    width: 30px;
+    height: 30px;
+  }
+
+  .btn-outline-primary {
+    border-radius: 20px; /* Botones con bordes redondeados */
+  }
+
+  h5 {
+    font-size: 1.3rem;
+    font-weight: 600;
+  }
+
+  p {
+    font-size: 0.9rem;
+  }
+  .card {
+    background-color: #f8f9fa; /* Fondo claro */
+    border-radius: 20px;
+    border: none;
+  }
+
+  .form-control {
+    border-radius: 20px; /* Bordes redondeados */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombras suaves */
+  }
+
+  .btn-primary {
+    border-radius: 20px; /* Bordes redondeados */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombras en el botón */
+  }
+
+  .btn-primary:hover {
+    background-color: #0056b3; /* Cambio de color al pasar el ratón */
+  }
+</style>
+
+<div class="container mt-5">
+  <!-- Encabezado de bienvenida -->
+  <div class="text-center mb-5">
+    <h1 class="fw-bold" style="color: #2b2e4a;">¡Hola, {{ user.username }}!</h1>
+    <p class="text-muted">Aquí tienes un resumen de tu actividad.</p>
+  </div>
+
+  <!-- Estadísticas principales -->
+  <div class="row text-center mb-5">
+    <div class="col-md-4">
+      <div class="card shadow-sm p-4 text-center border-0" style="background-color: #fff5f5;">
+        <i class="bi bi-bookmark-heart text-danger" style="font-size: 2.5rem;"></i>
+        <h2 class="mt-3">{{ recipes_count }}</h2>
+        <p class="text-muted">Recetas Creadas</p>
+        <a href="{% url 'my_recipes' %}" class="btn btn-outline-danger btn-sm">Ver Mis Recetas</a>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-sm p-4 text-center border-0" style="background-color: #fffceb;">
+        <i class="bi bi-star-fill text-warning" style="font-size: 2.5rem;"></i>
+        <h2 class="mt-3">{{ favorites_count }}</h2>
+        <p class="text-muted">Recetas Favoritas</p>
+        <a href="{% url 'favorite_recipes' %}" class="btn btn-outline-warning btn-sm">Ver Favoritos</a>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-sm p-4 text-center border-0" style="background-color: #ebf7ff;">
+        <i class="bi bi-bar-chart text-primary" style="font-size: 2.5rem;"></i>
+        <h2 class="mt-3">{{ average_rating }}</h2>
+        <p class="text-muted">Promedio de Valoraciones</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Barra de búsqueda -->
+<div class="container mt-5">
+  <div class="card shadow-sm p-4">
+    <h4 class="text-center text-primary fw-bold">¿Qué receta estás buscando hoy?</h4>
+    <form method="get" action="{% url 'recipe_book' %}" class="d-flex justify-content-center mt-3">
+      <input type="text" name="q" class="form-control w-50" placeholder="Hoy quiero cocinar..." aria-label="Buscar recetas">
+      <button type="submit" class="btn btn-primary ms-3">Buscar</button>
+    </form>
+  </div>
+</div>
+
+<!-- Inspiración del día: Carrusel -->
+{% if daily_inspiration %}
+
+<div class="container mt-5">
+  <h2 class="text-center mb-4 text-primary fw-bold">Inspiración del Día</h2>
+  <div id="dailyInspirationCarousel" class="carousel slide shadow-lg rounded" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      {% for recipe in daily_inspiration %}
+        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+          <div class="d-flex flex-column align-items-center p-4">
+            {% if recipe.photo %}
+              <img src="{{ recipe.photo.url }}" class="d-block rounded" style="max-width: 80%; height: 300px; object-fit: cover;" alt="{{ recipe.title }}">
+            {% else %}
+              <div class="d-flex justify-content-center align-items-center bg-light" style="width: 80%; height: 300px; border-radius: 10px; font-size: 1.5rem; color: #6c757d;">
+                Sin Imagen
+              </div>
+            {% endif %}
+            <h5 class="mt-3 fw-bold text-center text-secondary">{{ recipe.title }}</h5>
+            <p class="text-muted text-center px-3" style="max-width: 80%;">{{ recipe.description|truncatewords:20 }}</p>
+            <a href="{% url 'recipe_detail' recipe.id %}" class="btn btn-outline-primary btn-sm mt-3">Ver Receta</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <!-- Controles del Carrusel -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#dailyInspirationCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon bg-dark rounded-circle" aria-hidden="true"></span>
+      <span class="visually-hidden">Anterior</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#dailyInspirationCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon bg-dark rounded-circle" aria-hidden="true"></span>
+      <span class="visually-hidden">Siguiente</span>
+    </button>
+  </div>
+</div>
+  {% else %}
+  <p class="text-muted text-center mb-5">No hay recetas disponibles para mostrar como inspiración.</p>
+  {% endif %}
+
+  <!-- Botón Flotante -->
+  <a href="{% url 'create_recipe' %}" class="btn btn-success btn-lg rounded-circle shadow-sm" 
+     style="position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+    <i class="bi bi-plus"></i>
+  </a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}

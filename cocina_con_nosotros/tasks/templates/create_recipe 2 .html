@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="text-center mb-4" style="color: #2b2e4a; font-weight: bold;">Crear Receta</h2>
+
+  <form method="POST" enctype="multipart/form-data" class="mt-4">
+    {% csrf_token %}
+
+    <!-- Información general de la receta -->
+    <div class="card border-0 shadow-sm mb-4">
+      <div class="card-header bg-secondary text-white">
+        <h4 class="mb-0">Detalles de la Receta</h4>
+      </div>
+      <div class="card-body">
+        <div class="row g-3">
+          {{ recipe_form.as_p }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Ingredientes -->
+    <div class="card border-0 shadow-sm mb-4">
+      <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">Ingredientes</h4>
+        <button type="button" class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#ingredientModal">
+          Agregar Ingrediente
+        </button>
+      </div>
+      <div class="card-body">
+        <!-- Tabla para los ingredientes -->
+        <table id="ingredientTable" class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Cantidad</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Los ingredientes agregados dinámicamente aparecerán aquí -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Botón para enviar -->
+    <div class="text-center">
+      <button type="submit" class="btn btn-success btn-lg">
+        Guardar Receta
+      </button>
+    </div>
+  </form>
+</div>
+
+<!-- Modal para agregar/editar ingredientes -->
+<div class="modal fade" id="ingredientModal" tabindex="-1" aria-labelledby="ingredientModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-secondary text-white">
+        <h5 class="modal-title" id="ingredientModalLabel">Agregar Ingrediente</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="ingredientForm">
+          <div id="errorMessage" class="text-danger mb-3" aria-live="assertive"></div>
+          <div class="mb-3">
+            <label for="ingredientName" class="form-label">Nombre del Ingrediente</label>
+            <input type="text" id="ingredientName" class="form-control" placeholder="Ej: Harina">
+          </div>
+          <div class="mb-3">
+            <label for="ingredientQuantity" class="form-label">Cantidad</label>
+            <input type="text" id="ingredientQuantity" class="form-control" placeholder="Ej: 1 kg">
+          </div>
+          <input type="hidden" id="editingRowIndex" value="">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary" id="saveIngredient">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Scripts para DataTables y Bootstrap Modal -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+{% endblock %}

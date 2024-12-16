@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+  <h1 class="text-center mb-4" style="color: #2b2e4a;">Valorar Receta: {{ recipe.title }}</h1>
+  
+  <form id="rate-form" method="post">
+    {% csrf_token %}
+    <div class="text-center mb-4">
+      <label for="rating" class="form-label">Selecciona tu valoración:</label>
+      <select name="rating" id="rating" class="form-select w-50 mx-auto">
+        <option value="1" {% if existing_rating and existing_rating.rating == 1 %}selected{% endif %}>1 Estrella</option>
+        <option value="2" {% if existing_rating and existing_rating.rating == 2 %}selected{% endif %}>2 Estrellas</option>
+        <option value="3" {% if existing_rating and existing_rating.rating == 3 %}selected{% endif %}>3 Estrellas</option>
+        <option value="4" {% if existing_rating and existing_rating.rating == 4 %}selected{% endif %}>4 Estrellas</option>
+        <option value="5" {% if existing_rating and existing_rating.rating == 5 %}selected{% endif %}>5 Estrellas</option>
+      </select>
+    </div>
+    <div class="text-center">
+      <button type="submit" class="btn btn-primary">Enviar valoración</button>
+    </div>
+  </form>
+
+  {% if existing_rating %}
+    <p class="text-center text-muted mt-4">Ya has valorado esta receta con {{ existing_rating.rating }} estrellas.</p>
+  {% endif %}
+</div>
+
+<script>
+  document.getElementById('rate-form').addEventListener('submit', function (e) {
+    e.preventDefault();  // Evita la recarga automática de la página
+
+    const formData = new FormData(this);
+    fetch(this.action, {
+      method: 'POST',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+      body: formData
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          iziToast.success({
+            title: '¡Éxito!',
+            message: data.message,
+            position: 'topRight'
+          });
+        } else {
+          iziToast.error({
+            title: 'Error',
+            message: data.message,
+            position: 'topRight'
+          });
+        }
+        setTimeout(() => {
+          window.location.href = `/recipe/${data.recipe_id}/`;
+        }, 2000); // Redirige después de 2 segundos
+      })
+      .catch(error => {
+        iziToast.error({
+          title: 'Error',
+          message: 'Ocurrió un problema. Por favor, intenta de nuevo.',
+          position: 'topRight'
+        });
+      });
+  });
+</script>
+{% endblock %}

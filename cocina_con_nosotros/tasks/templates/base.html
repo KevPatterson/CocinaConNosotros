@@ -1,0 +1,141 @@
+{% load widget_tweaks %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cocina con Nosotros</title>
+    <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+    
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+
+    <!-- Popovers -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRcFJ9f8Vj9eFj6Tj8JGKsf4GjE14ni50mTrJ4JnR" crossorigin="anonymous">
+
+    <!-- CSS de DataTables -->
+    <link rel="stylesheet" type="text/css" href="{% static 'lib/DataTables/DataTables-1.12.1/css/jquery.dataTables.min.css' %}">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+
+    <!-- CSS de iziToast -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/izitoast/dist/css/iziToast.min.css">
+
+    <style>
+      /* Fondo degradado para la página */
+      body {
+        background: linear-gradient(180deg, #4e54c8, #8f94fb); /* Degradado azul */
+        color: #ffffff; /* Color de texto predeterminado para asegurar legibilidad */
+        min-height: 100vh; /* Asegura que el fondo cubra toda la ventana */
+        display: flex;
+        flex-direction: column;
+        padding-top: 70px;
+      }
+    
+      main {
+        color: black;
+        flex: 1; /* Empuja el footer hacia abajo */
+        margin-bottom: 20px; /* Espacio entre el contenido y el footer */
+        background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco semitransparente */
+        border-radius: 12px; /* Bordes redondeados para el contenido principal */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra sutil */
+        padding: 20px; /* Espaciado interno */
+        backdrop-filter: blur(8px); /* Efecto de desenfoque para un look elegante */
+      }
+    
+      footer {
+        background-color: #2b2e4a; /* Fondo oscuro para contraste */
+        color: white;
+        text-align: center;
+        padding: 1rem 0;
+      }
+    
+      /* Estilo para el scroll */
+      ::-webkit-scrollbar {
+        width: 16px; /* Ancho del scroll */
+      }
+      ::-webkit-scrollbar-track {
+        background: #2b2e4a; /* Fondo del track del scroll */
+        border-radius: 12px; /* Bordes redondeados */
+      }
+      ::-webkit-scrollbar-thumb {
+        background: linear-gradient(180deg, #4e54c8, #8f94fb); /* Degradado en el thumb */
+        border-radius: 12px; /* Bordes redondeados */
+        border: 3px solid #2b2e4a; /* Bordes oscuros */
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(180deg, #8f94fb, #4e54c8); /* Cambio de degradado al hover */
+      }
+    </style>
+  </head>
+  <body>
+    {% include '_navbar.html' %}
+    
+    <!-- Contenido principal -->
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <main>
+      {% block content %}
+      {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <p>&copy; 2024 Comunidad de Recetas | Todos los derechos reservados | Hecho con 💖 por el equipo culinario del CDF2304</p>
+      <a href="https://www.facebook.com" class="text-white me-3"><i class="bi bi-facebook"></i></a>
+      <a href="https://www.twitter.com" class="text-white me-3">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-twitter-x" viewBox="0 0 16 16">
+        <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865z"/>
+        </svg>
+      </a>
+      <a href="https://www.instagram.com" class="text-white"><i class="bi bi-instagram"></i></a>
+    </footer>
+
+    <!-- JS de DataTables -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+    <!-- iziToast -->
+    <script src="https://cdn.jsdelivr.net/npm/izitoast/dist/js/iziToast.min.js"></script>
+
+    <!-- Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script> 
+    <!-- Popovers -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-HFELZrJQVYCqsd5lI/CYnlI1zz4W19Q7LSODm3xM5W3g2tZx5cTYUrHDeznayfw7" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Q8Ewh3Gg7M2XrokaNCvsKiwC8sY6PRapFAJ1MDZAgddh5CdbM9PW1fn2D1bXn6cS" crossorigin="anonymous"></script>
+
+
+    <script>
+        // Función para manejar notificaciones
+        function showNotification(type, title, message) {
+            iziToast[type]({
+                title: title,
+                message: message,
+                position: 'topRight',
+                timeout: 5000, // Duración de la notificación
+                transitionIn: 'bounceInLeft',
+                transitionOut: 'fadeOut',
+            });
+        }
+
+        // Procesar mensajes de Django
+        document.addEventListener("DOMContentLoaded", function () {
+          // Iterar sobre los mensajes directamente desde el servidor
+          {% for message in messages %}
+              showNotification("{{ message.tags }}", '', "{{ message.message }}");
+          {% endfor %}
+      });
+      
+    </script>
+  </body>
+</html>

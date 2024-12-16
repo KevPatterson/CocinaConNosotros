@@ -1,0 +1,256 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container mt-5">
+  <!-- Publicación -->
+  <div class="card shadow-sm mb-4" style="border-radius: 10px; overflow: hidden; border: none;">
+    <!-- Foto de la receta -->
+    <div class="position-relative">
+      {% if recipe.photo %}
+        <img src="{{ recipe.photo.url }}" 
+             alt="{{ recipe.title }}" 
+             class="w-100" 
+             style="height: 250px; object-fit: cover;">
+      {% else %}
+        <div class="d-flex justify-content-center align-items-center bg-light" 
+             style="height: 250px; font-size: 1.5rem; color: #6c757d;">
+          Sin Imagen
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Cuerpo de la publicación -->
+    <div class="card-body">
+      <h3 class="card-title fw-bold text-primary">{{ recipe.title }}</h3>
+      <p class="text-muted mb-2">{{ recipe.category }}</p>
+      <p class="card-text text-muted">{{ recipe.description }}</p>
+      <p class="card-text text-muted">{{ recipe.preparation }}</p>
+
+      <!-- Botón para manejar favoritos -->
+      <button id="favorite-btn" class="btn {% if is_favorited %}btn-danger{% else %}btn-outline-danger{% endif %} mt-3" data-recipe-id="{{ recipe.id }}">
+        {% if is_favorited %}
+        <i class="bi bi-heart-fill"></i> Quitar de Favoritos
+        {% else %}
+        <i class="bi bi-heart"></i> Añadir a Favoritos
+        {% endif %}
+      </button>
+
+      <!-- Detalles adicionales -->
+      <div class="d-flex justify-content-between align-items-center mt-4">
+        <div class="d-flex align-items-center">
+          <i class="bi bi-person-fill text-primary me-2"></i>
+          <span>{{ recipe.servings }} persona(s)</span>
+        </div>
+        <div class="d-flex align-items-center">
+          <i class="bi bi-clock text-primary me-2"></i>
+          <span>{{ recipe.preparation_time }} min</span>
+        </div>
+        <div class="d-flex align-items-center">
+          <i class="bi bi-bar-chart text-primary me-2"></i>
+          <span>{{ recipe.get_difficulty_display }}</span>
+        </div>
+        <div class="d-flex align-items-center">
+        <!-- Valoración de la receta -->
+          <i class="bi bi-star-fill text-warning me-2"></i>
+          <span>{{ average_rating }} / 5</span>
+          {% if total_ratings > 0 %}
+            <small class="text-muted ms-2">({{ total_ratings }} valoraciones)</small>
+          {% else %}
+            <small class="text-muted ms-2">(Sin valoraciones)</small>
+          {% endif %}
+        </div>
+      </div><br>
+
+      <!-- Ingredientes -->
+      <h5>Ingredientes:</h5>
+      <ul class="list-unstyled">
+        {% for ingredient in recipe.ingredients.all %}
+          <li><i class="bi bi-check-circle text-success me-2"></i>{{ ingredient.quantity }} de {{ ingredient.name }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <!-- Sección de Comentarios -->
+  <div class="card shadow-sm mb-5">
+    <div class="card-header bg-light">
+      <h4 class="fw-bold text-primary">Comentarios</h4>
+    </div>
+    <div class="card-body">
+      {% if comments %}
+        <ul class="list-unstyled">
+          {% for comment in comments %}
+            <li class="mb-4">
+              <div class="d-flex align-items-start">
+                <img src="{% if comment.user.profile.photo %}{{ comment.user.profile.photo.url }}{% else %}{% static 'images/default-user.png' %}{% endif %}" 
+                     alt="{{ comment.user.username }}" 
+                     class="rounded-circle me-3" 
+                     style="width: 50px; height: 50px; object-fit: cover;">
+                <div>
+                  <h6 class="mb-1">{{ comment.user.username }}</h6>
+                  <p class="text-muted small">{{ comment.created_at|date:"d M, Y H:i" }}</p>
+                  <p>{{ comment.content }}</p>
+                  <!-- Botón para mostrar el recuadro de respuesta -->
+                  <button class="btn btn-link text-primary p-0 reply-toggle" data-comment-id="{{ comment.id }}">
+                    Responder
+                  </button>
+                </div>
+              </div>
+  
+              <!-- Recuadro de respuesta -->
+              <div class="reply-box mt-3 ms-5 d-none" id="reply-box-{{ comment.id }}">
+                <textarea class="form-control mb-2" placeholder="Escribe tu respuesta..." rows="2"></textarea>
+                <button class="btn btn-primary btn-sm submit-reply" data-comment-id="{{ comment.id }}">Enviar</button>
+                <button class="btn btn-link text-danger cancel-reply" data-comment-id="{{ comment.id }}">Cancelar</button>
+              </div>
+  
+              <!-- Respuestas -->
+              {% if comment.replies.exists %}
+                <ul class="list-unstyled ms-5 mt-3">
+                  {% for reply in comment.replies.all %}
+                    <li class="mb-3">
+                      <div class="d-flex align-items-start">
+                        <img src="{% if reply.user.profile.photo %}{{ reply.user.profile.photo.url }}{% else %}{% static 'images/default-user.png' %}{% endif %}" 
+                             alt="{{ reply.user.username }}" 
+                             class="rounded-circle me-3" 
+                             style="width: 40px; height: 40px; object-fit: cover;">
+                        <div>
+                          <h6 class="mb-1">{{ reply.user.username }}</h6>
+                          <p class="text-muted small">{{ reply.created_at|date:"d M, Y H:i" }}</p>
+                          <p>{{ reply.content }}</p>
+                        </div>
+                      </div>
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="text-muted">No hay comentarios. ¡Sé el primero en comentar!</p>
+      {% endif %}
+    </div>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const favoriteButton = document.getElementById('favorite-btn');
+    
+      if (favoriteButton) {
+        favoriteButton.addEventListener('click', function () {
+          const recipeId = this.dataset.recipeId;
+          const isFavorited = this.classList.contains('btn-danger');
+          const url = isFavorited
+            ? `/favorites/remove/${recipeId}/`
+            : `/favorites/add/${recipeId}/`;
+    
+          fetch(url, {
+            method: 'GET',
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest',
+            },
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                iziToast.success({
+                  title: '¡Éxito!',
+                  message: data.message,
+                  position: 'topRight',
+                });
+    
+                // Cambiar el estado del botón
+                this.classList.toggle('btn-danger');
+                this.classList.toggle('btn-outline-danger');
+                this.innerHTML = isFavorited
+                  ? '<i class="bi bi-heart"></i> Añadir a Favoritos'
+                  : '<i class="bi bi-heart-fill"></i> Quitar de Favoritos';
+              } else {
+                iziToast.error({
+                  title: 'Error',
+                  message: data.message,
+                  position: 'topRight',
+                });
+              }
+            })
+            .catch((error) => {
+              iziToast.error({
+                title: 'Error',
+                message: 'Ocurrió un problema. Por favor, intenta de nuevo.',
+                position: 'topRight',
+              });
+              console.error('Error:', error);
+            });
+        });
+      }
+    });
+    document.addEventListener('DOMContentLoaded', () => {
+      // Mostrar recuadro de respuesta
+      document.querySelectorAll('.reply-toggle').forEach(button => {
+        button.addEventListener('click', function () {
+          const commentId = this.dataset.commentId;
+          document.getElementById(`reply-box-${commentId}`).classList.remove('d-none');
+        });
+      });
+  
+      // Cancelar respuesta
+      document.querySelectorAll('.cancel-reply').forEach(button => {
+        button.addEventListener('click', function () {
+          const commentId = this.dataset.commentId;
+          document.getElementById(`reply-box-${commentId}`).classList.add('d-none');
+        });
+      });
+  
+      // Enviar respuesta con fetch
+      document.querySelectorAll('.submit-reply').forEach(button => {
+        button.addEventListener('click', function () {
+          const commentId = this.dataset.commentId;
+          const replyBox = document.getElementById(`reply-box-${commentId}`);
+          const content = replyBox.querySelector('textarea').value;
+  
+          fetch(`/comments/reply/`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({ parent_id: commentId, content: content })
+          })
+            .then(response => response.json())
+            .then(data => {
+              if (data.success) {
+                location.reload(); // Recarga para mostrar los nuevos comentarios
+              } else {
+                alert(data.message);
+              }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+      });
+  
+      // Enviar comentario principal con fetch
+      document.getElementById('comment-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const content = document.getElementById('comment-content').value;
+  
+        fetch(`/comments/add/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+          },
+          body: JSON.stringify({ content: content })
+        })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              location.reload(); // Recarga para mostrar el nuevo comentario
+            } else {
+              alert(data.message);
+            }
+          })
+          .catch(error => console.error('Error:', error));
+      });
+    });
+  </script>
+{% endblock %}

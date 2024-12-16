@@ -1,0 +1,76 @@
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center text-primary">Recetas Destacadas</h1>
+    <p class="lead text-center text-muted">Explora nuestras mejores recetas seleccionadas especialmente para ti.</p>
+
+    <!-- Carrusel -->
+    <div id="recipesCarousel" class="carousel slide" data-bs-ride="carousel">
+        <!-- Indicadores -->
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#recipesCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#recipesCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#recipesCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+
+        <!-- Contenedor de diapositivas -->
+        <div class="carousel-inner">
+            <!-- Primer receta -->
+            <div class="carousel-item active">
+                <img src="https://canalcocina.es/medias/_cache/zoom-bf41e4f82da7fe3156a156168d10bddb-920-518.jpg" class="d-block w-100" alt="Panqueques" style="height: 500px; object-fit: cover;">
+                <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-3">
+                    <h5>Panqueques con Miel</h5>
+                    <p>Deliciosos panqueques esponjosos acompañados de miel.</p>
+                    <a href="#" class="btn btn-primary">Ver receta</a>
+                </div>
+            </div>
+
+            <!-- Segunda receta -->
+            <div class="carousel-item">
+                <img src="https://canalcocina.es/medias/_cache/zoom-b4bbe49775eed77c7ba109296dce250c-920-518.jpg" class="d-block w-100" alt="Tarta de manzana" style="height: 500px; object-fit: cover;">
+                <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-3">
+                    <h5>Tarta de Manzana</h5>
+                    <p>Una tarta casera de manzana, perfecta para el postre.</p>
+                    <a href="#" class="btn btn-primary">Ver receta</a>
+                </div>
+            </div>
+
+            <!-- Tercer receta -->
+            <div class="carousel-item">
+                <img src="https://canalcocina.es/medias/_cache/zoom-417ab2075bed63d056d40fc49d7ca718-920-518.jpg" class="d-block w-100" alt="Omelette de espinacas" style="height: 500px; object-fit: cover;">
+                <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-3">
+                    <h5>Omelette de Espinacas</h5>
+                    <p>Un omelette saludable con espinacas frescas.</p>
+                    <a href="#" class="btn btn-primary">Ver receta</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controles -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#recipesCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Anterior</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#recipesCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Siguiente</span>
+        </button>
+    </div>
+</div>
+
+<!-- Sweet Alert para interacción -->
+<script>
+    $(document).ready(function() {
+        $('.carousel-item').on('click', function() {
+            Swal.fire({
+                title: 'Receta seleccionada',
+                text: 'Haz clic en "Ver receta" para más detalles.',
+                icon: 'info',
+                confirmButtonText: '¡Entendido!'
+            });
+        });
+    });
+</script>
+
+{% endblock %}

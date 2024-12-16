@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+  <h1 class="text-center mb-4" style="color: #2b2e4a;">Comentar Receta: {{ recipe.title }}</h1>
+
+  <form id="comment-form" method="post">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="content" class="form-label">Comentario:</label>
+      <textarea name="content" id="content" class="form-control" rows="3"></textarea>
+    </div>
+    <div class="text-center mt-4">
+      <button type="submit" class="btn btn-primary">Enviar comentario</button>
+    </div>
+  </form>
+</div>
+
+<script>
+  document.getElementById('comment-form').addEventListener('submit', function (e) {
+    e.preventDefault(); // Evitar recargar la página
+
+    const formData = new FormData(this);
+    fetch(this.action, {
+      method: 'POST',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+      body: formData
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          iziToast.success({
+            title: '¡Éxito!',
+            message: data.message,
+            position: 'topRight'
+          });
+
+          setTimeout(() => {
+            window.location.href = `/recipe/${data.recipe_id}/`;
+          }, 2000); // Redirige después de 2 segundos
+        } else {
+          iziToast.error({
+            title: 'Error',
+            message: data.message,
+            position: 'topRight'
+          });
+        }
+      })
+      .catch(error => {
+        iziToast.error({
+          title: 'Error',
+          message: 'Ocurrió un problema al enviar el comentario.',
+          position: 'topRight'
+        });
+        console.error('Error:', error);
+      });
+  });
+</script>
+{% endblock %}

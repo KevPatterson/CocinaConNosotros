@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block content %}
+<style>
+    .hero-section {
+        background: linear-gradient(90deg, rgba(0, 0, 0, 0.8), rgba(7, 109, 218, 0.8)); /* Azul con transparencia */
+        color: white;
+        padding: 2rem;
+        text-align: center;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.7); /* Añade una sombra ligera */
+    }
+    .hero-cooking {
+        background: linear-gradient(90deg, rgba(0, 0, 0, 0.8), rgba(0, 123, 255, 0.8)); /* Degradado de negro a azul */
+        color: white;
+        border-radius: 8px; /* Bordes redondeados */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+        padding: 2rem;
+    }
+    .text-3d {
+        color: #fff; /* Color principal */
+        text-shadow: 0 1px 0 #ccc,
+                    0 2px 0 #c9c9c9,
+                    0 3px 0 #bbb, 
+                    0 4px 0 #b9b9b9, 
+                    0 5px 0 #aaa, 
+                    0 6px 1px rgba(0, 0, 0, .1), 
+                    0 0 5px rgba(0, 0, 0, .1), 
+                    0 1px 3px rgba(0, 0, 0, .3), 
+                    0 3px 5px rgba(0, 0, 0, .2), 
+                    0 5px 10px rgba(0, 0, 0, .25), 
+                    0 10px 10px rgba(0, 0, 0, .2),
+                    0 20px 20px rgba(0, 0, 0, .15) ;
+    }
+    .text-3d-2 {
+        color: #fff; /* Color principal */
+        text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.4),
+                     0px 2px 0px rgba(0, 0, 0, 0.3),
+                     0px 3px 0px rgba(0, 0, 0, 0.2),
+                     0px 4px 0px rgba(0, 0, 0, 0.1),
+                     0px 5px 0px rgba(0, 0, 0, 0.05);
+        font-size: 2.5rem; /* Ajusta según el tamaño necesario para <h2> */
+        font-weight: bold;
+        letter-spacing: 1px; /* Espaciado entre letras */
+        line-height: 1.3; /* Ajuste de altura de línea */
+    }
+</style>
+<!-- Banner principal -->
+<div class="container-fluid p-0">
+    <!-- Banner principal -->
+    <div class="hero-section">
+        <h1 class="display-4 fw-bold text-3d">Cocina con Nosotros</h1>
+        <p>Aprende a cocinar con nosotros y conecta con el mundo de la gastronomía.</p>
+        <div class="d-flex justify-content-center gap-3 mt-3">
+          <a href="{% url 'signin' %}" class="btn btn-outline-light btn-lg">
+            Iniciar Sesión <i class="bi bi-box-arrow-in-right"></i>
+          </a>
+          <a href="{% url 'signup' %}" class="btn btn-success btn-lg">
+            Registrarme <i class="bi bi-person-plus"></i>
+          </a>
+        </div>
+      </div>
+    <!-- Sobre nosotros -->
+    <div class="container py-5">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h2 class="fw-bold text-3d-2 text-dark">Sobre Nosotros</h2>
+                <p class="text-muted">En Cocina con Nosotros, creemos que la cocina es más que una actividad diaria. Es una forma de conectar culturas, explorar sabores y crear momentos inolvidables con los que más quieres.</p>
+                <p class="text-muted">¡Inspírate con nuestras recetas y da rienda suelta a tu creatividad en la cocina!</p>
+            </div>
+            <div class="col-md-6 text-center">
+                <img src="{% static 'images/newsletter-bg.jpg' %}" alt="Sobre nosotros" class="img-fluid rounded shadow">
+            </div>
+        </div>
+    </div>
+
+    <!-- Recetas en tendencia -->
+    <div class="bg-light py-5">
+        <div class="container">
+            <h2 class="fw-bold text-center text-3d-2 text-dark mb-4">Recetas en Tendencia</h2>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+                <div class="col">
+                    <div class="card border-0 shadow-sm">
+                        <img src="https://www.cocinacaserayfacil.net/wp-content/uploads/2018/05/Cordon-bleu-de-pollo.jpg" class="card-img-top" alt="Receta 1">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">CORDÓN BLEU</h5>
+                            <p class="card-text text-muted">Preparación francesa con escalope, jamón y queso, rebozado y delicioso.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card border-0 shadow-sm">
+                        <img src="https://www.cocinacaserayfacil.net/wp-content/uploads/2023/12/Ramen-1-680x350.jpg" class="card-img-top" alt="Receta 2">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">RAMEN</h5>
+                            <p class="card-text text-muted">Sopa japonesa con fideos y una mezcla única de sabores.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card border-0 shadow-sm">
+                        <img src="https://milrecetas.net/wp-content/uploads/2016/09/Tacos-al-pastor-1-768x432.jpg" class="card-img-top" alt="Receta 3">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">TACOS AL PASTOR</h5>
+                            <p class="card-text text-muted">Tacos mexicanos con carne adobada, asada y servida en tortillas de maíz.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card border-0 shadow-sm">
+                        <img src="https://milrecetas.net/wp-content/uploads/2017/09/tipos-de-pizza-0.jpg" class="card-img-top" alt="Receta 4">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">PIZZA CASERA</h5>
+                            <p class="card-text text-muted">Prepara una pizza casera con tus ingredientes favoritos. ¡Fácil y deliciosa!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Llamada a la acción -->
+    <div class="hero-cooking py-5 text-center text-white">
+        <h2 class="fw-bold text-3d-2">¡Es hora de empezar a cocinar!</h2>
+        <p class="lead">Regístrate para compartir tus recetas, obtener ideas nuevas y conectar con otros amantes de la cocina.</p>
+        <a href="{% url 'signup' %}" class="btn btn-light btn-lg px-5">
+            ¡Comienza ahora! <i class="bi bi-arrow-right-circle"></i>
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+    document.getElementById('loginBtn').addEventListener('click', function(event) {
+        event.preventDefault();
+        Swal.fire({
+            title: '¡Bienvenido de nuevo!',
+            text: 'Estás a punto de iniciar sesión en tu cuenta.',
+            icon: 'info',
+            confirmButtonText: '¡Entendido!'
+        }).then(() => {
+            window.location.href = "{% url 'signin' %}";
+        });
+    });
+
+    document.getElementById('registerBtn').addEventListener('click', function(event) {
+        event.preventDefault();
+        Swal.fire({
+            title: '¡Regístrate ahora!',
+            text: 'Crea tu cuenta y empieza a compartir tus recetas.',
+            icon: 'success',
+            confirmButtonText: '¡Empezar!'
+        }).then(() => {
+            window.location.href = "{% url 'signup' %}";
+        });
+    });
+</script>
+{% endblock %}

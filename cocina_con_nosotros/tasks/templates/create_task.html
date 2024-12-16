@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{{error}}
+<div class="container mt-4">
+        <h1 class="mb-4">Crear una nueva receta</h1>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Guardar receta</button>
+            <a href="{% url 'dashboard' %}" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+
+{% endblock %}

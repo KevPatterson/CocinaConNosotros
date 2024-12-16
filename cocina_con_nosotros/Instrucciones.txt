@@ -1,0 +1,43 @@
+- Instalar Python 3.11
+- dentro de la carpeta correr el comando : python -m venv .venv
+- luego : .venv\Scripts\activate (si estas en windows)
+- correr luego pip install -r requirements.txt (En caso de que no se instalen todas las dependencias instalarlas manualmente)
+- correr python manage.py runserver o python manage.py runsslserver
+- y luego en el navegador de internet http://127.0.0.1:8000/ o https://127.0.0.1:8000/
+
+Opcional:
+Cambiar en pyvenv.cfg el nombre de usario de tu pc en caso de que se quede como "Patterson"
+
+home = C:\Users\tu_usuario\AppData\Local\Programs\Python\Python313
+include-system-site-packages = false
+version = 3.13.0
+executable = C:\Users\tu_usuario\Desktop\.venv\Scripts\python.exe
+command = C:\Users\tu_usuario\Desktop\.venv\Scripts\python.exe -m venv C:\Users\tu_usuario\Desktop\django-notes-master\django-notes-master\.venv
+
+Credenciales: (Superusuario)
+user: admin@example.com
+pass: admin123
+
+En caso de que tuversión de Python no sea compatible con django-sslserver:
+
+- Acceder al archivo runsslserver.py en tu entorno virtual:
+<path_to_virtualenv>/Lib/site-packages/sslserver/management/commands/runsslserver.py
+- Busca la línea donde se utiliza ssl.wrap_socket (debería ser algo similar a esta):
+
+self.socket = ssl.wrap_socket(self.socket, certfile=certificate, keyfile=key,
+                              server_side=True, ssl_version=ssl.PROTOCOL_TLS)
+
+- Reemplázala con este código, que utiliza ssl.SSLContext:
+
+class SecureHTTPServer(ThreadedWSGIServer):
+    def __init__(self, address, handler_cls, certificate, key, ipv6=False):
+        super(SecureHTTPServer, self).__init__(address, handler_cls, ipv6=ipv6)
+        
+        # Crear un contexto SSL utilizando el protocolo TLS moderno
+        context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+        
+        # Cargar el certificado y la clave
+        context.load_cert_chain(certfile=certificate, keyfile=key)
+        
+        # Envolver el socket con el contexto SSL
+        self.socket = context.wrap_socket(self.socket, server_side=True)

@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="text-center mb-4">
+    <h1 class="display-6 text-primary">Registros de Auditoría</h1>
+    <p class="text-muted">Historial detallado de las acciones realizadas en el sistema.</p>
+  </div>
+
+  <!-- Barra de búsqueda -->
+  <form method="get" action="" class="mb-4 d-flex justify-content-center">
+    <input type="text" name="q" value="{{ query }}" class="form-control w-50" placeholder="Buscar por usuario, acción o modelo...">
+    <button type="submit" class="btn btn-primary ms-2">Buscar</button>
+  </form>
+
+  <!-- Tabla de registros de auditoría -->
+  <div class="table-responsive shadow-sm rounded">
+    <table class="table table-striped table-hover align-middle">
+      <thead class="table-primary text-center">
+        <tr>
+          <th>Usuario</th>
+          <th>Acción</th>
+          <th>Modelo</th>
+          <th>Fecha</th>
+          <th>Cambios</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for log in logs %}
+        <tr>
+          <td class="text-center">
+            {% if log.actor %}
+              <span class="badge bg-info text-dark">{{ log.actor.username }}</span>
+            {% else %}
+              <span class="badge bg-secondary">Anónimo</span>
+            {% endif %}
+          </td>
+          <td class="text-center text-capitalize">{{ log.get_action_display }}</td>
+          <td class="text-center">{{ log.content_type }}</td>
+          <td class="text-center">{{ log.timestamp|date:"d M Y, H:i" }}</td>
+          <td>
+            <button 
+              class="btn btn-outline-primary btn-sm" 
+              data-bs-toggle="collapse" 
+              data-bs-target="#changes-{{ forloop.counter }}" 
+              aria-expanded="false" 
+              aria-controls="changes-{{ forloop.counter }}">
+              Ver Cambios
+            </button>
+            <div class="collapse mt-2" id="changes-{{ forloop.counter }}">
+              <pre class="bg-light p-2 rounded border">{{ log.changes }}</pre>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Paginación -->
+  <div class="d-flex justify-content-center mt-4">
+    <nav>
+      <ul class="pagination">
+        {% if logs.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ logs.previous_page_number }}{% if query %}&q={{ query }}{% endif %}">Anterior</a>
+        </li>
+        {% endif %}
+
+        {% for num in logs.paginator.page_range %}
+        <li class="page-item {% if logs.number == num %}active{% endif %}">
+          <a class="page-link" href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}">{{ num }}</a>
+        </li>
+        {% endfor %}
+
+        {% if logs.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ logs.next_page_number }}{% if query %}&q={{ query }}{% endif %}">Siguiente</a>
+        </li>
+        {% endif %}
+      </ul>
+    </nav>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}

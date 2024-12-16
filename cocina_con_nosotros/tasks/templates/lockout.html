@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso Bloqueado</title>
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+</head>
+<body style="background-color: #f4f4f9; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh;">
+    <header class="mb-4">
+        <h1 style="color: #e84545; font-size: 2rem;">Acceso Bloqueado</h1>
+    </header>
+
+    <div class="container text-center">
+        <p class="lead">Has excedido el número máximo de intentos de inicio de sesión.</p>
+        <p>Por favor, intenta de nuevo más tarde o contacta al administrador si necesitas ayuda.</p>
+        <a href="/" class="btn btn-primary mt-3">Volver a la página principal</a>
+        <a href="/contact/" class="btn btn-secondary mt-3">Contactar al soporte</a>
+    </div>
+
+    <footer class="mt-4">
+        <p class="text-muted">&copy; 2024 Comunidad de Recetas | Todos los derechos reservados | Hecho con 💖 por el equipo culinario del CDF2304</p>
+    </footer>
+
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Acceso Bloqueado',
+            text: 'Has excedido el número máximo de intentos de inicio de sesión. Por favor, intenta de nuevo más tarde o contacta al administrador.',
+            confirmButtonText: 'Entendido',
+            confirmButtonColor: '#e84545',
+        });
+    </script>
+</body>
+</html>

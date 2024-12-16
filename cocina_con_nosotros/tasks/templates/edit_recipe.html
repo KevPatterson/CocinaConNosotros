@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="text-center mb-4" style="color: #2b2e4a; font-weight: bold;">Editar Receta</h2>
+
+  <form method="POST" enctype="multipart/form-data" class="mt-4">
+    {% csrf_token %}
+
+    <!-- Información general de la receta -->
+    <div class="card border-0 shadow-sm mb-4">
+      <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">Detalles de la Receta</h4>
+      </div>
+      <div class="card-body">
+        {{ recipe_form.as_p }}
+      </div>
+    </div>
+
+    <!-- Ingredientes -->
+    <div class="card border-0 shadow-sm mb-4">
+      <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">Ingredientes</h4>
+        <button type="button" class="btn btn-outline-light btn-sm" id="add-ingredient">
+          <i class="bi bi-plus-circle"></i> Añadir Ingrediente
+        </button>
+      </div>
+      <div class="card-body">
+        <table id="ingredientTable" class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Cantidad</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Ingredientes existentes gestionados por formset -->
+            {% for ingredient in ingredient_formset %}
+            <tr>
+              <td>
+                <input type="hidden" name="{{ ingredient.prefix }}-id" value="{{ ingredient.instance.id }}">
+                <input type="text" name="{{ ingredient.prefix }}-name" value="{{ ingredient.instance.name }}" class="form-control">
+              </td>
+              <td>
+                <input type="text" name="{{ ingredient.prefix }}-quantity" value="{{ ingredient.instance.quantity }}" class="form-control">
+              </td>
+              <td>
+                <button type="button" class="btn btn-danger btn-sm delete-ingredient">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {{ ingredient_formset.management_form }}
+      </div>
+    </div>
+
+    <!-- Botón para enviar -->
+    <div class="text-center">
+      <button type="submit" class="btn btn-success btn-lg">
+        <i class="bi bi-check-circle"></i> Guardar Cambios
+      </button>
+    </div>
+  </form>
+</div>
+
+<!-- Scripts para DataTables y manejo dinámico -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    // Inicializa DataTables
+    var table = $('#ingredientTable').DataTable({
+      paging: false,
+      searching: false,
+      info: false,
+      ordering: false,
+    });
+
+    // Agregar nuevo ingrediente dinámicamente
+    $('#add-ingredient').on('click', function () {
+      var newRow = table.row.add([
+        `<input type="text" name="new_ingredient_name" class="form-control" placeholder="Nombre del ingrediente">`,
+        `<input type="text" name="new_ingredient_quantity" class="form-control" placeholder="Cantidad del ingrediente">`,
+        `<button type="button" class="btn btn-danger btn-sm delete-ingredient"><i class="bi bi-trash"></i></button>`
+      ]).draw().node();
+
+      // Agregar funcionalidad al botón de eliminar para nuevos ingredientes
+      $(newRow).find('.delete-ingredient').on('click', function () {
+        table.row($(this).closest('tr')).remove().draw();
+      });
+    });
+
+    // Eliminar fila de ingrediente existente
+    $('#ingredientTable').on('click', '.delete-ingredient', function () {
+      const row = $(this).closest('tr');
+      const inputId = row.find('input[name$="-id"]').val();
+      
+      // Si el ingrediente es del formset, marca el campo DELETE para eliminarlo
+      if (inputId) {
+        row.hide(); // Ocultar fila en la tabla
+        row.find('input[name$="-DELETE"]').val('on'); // Marcar para eliminar
+      } else {
+        table.row(row).remove().draw(); // Eliminar fila si es nuevo
+      }
+    });
+  });
+</script>
+{% endblock %}

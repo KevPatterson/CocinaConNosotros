@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="container mt-5">
+  <h1 class="text-center mb-4" style="color: #2b2e4a;">Mis Recetas Favoritas</h1>
+
+  <div class="row">
+    {% for favorite in favorites %}
+    <div class="col-md-4 mb-4">
+      <div class="card shadow-sm">
+        <img src="{% if favorite.recipe.photo %}{{ favorite.recipe.photo.url }}{% else %}{% static 'images/no-image.jpg' %}{% endif %}" 
+             class="card-img-top" 
+             alt="{{ favorite.recipe.title }}">
+        <div class="card-body">
+          <h5 class="card-title">{{ favorite.recipe.title }}</h5>
+          <p class="card-text">{{ favorite.recipe.description|truncatewords:15 }}</p>
+          <a href="{% url 'recipe_detail' favorite.recipe.id %}" class="btn btn-primary btn-sm">Ver Receta</a>
+          <button class="btn btn-danger btn-sm" onclick="removeFavorite({{ favorite.recipe.id }})">Quitar</button>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <p class="text-center text-muted">No tienes recetas favoritas.</p>
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+  function removeFavorite(recipeId) {
+    fetch(`/favorites/remove/${recipeId}/`, {
+      method: 'GET',
+      headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    })
+      .then(response => response.json())
+      .then(data => {
+        alert(data.message);
+        location.reload();
+      })
+      .catch(error => console.error('Error:', error));
+  }
+</script>
+{% endblock %}
