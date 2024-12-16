@@ -14,7 +14,7 @@ El sistema está implementado utilizando **Django** como framework backend y cum
    - Registro y autenticación.
    - Inicio de sesión con usuario y contraseña.
    - Autenticación con Google mediante `django-allauth`.
-   - Sistema de bloqueo tras intentos fallidos con `django-axes`.
+   - Sistema de bloqueo tras intentos fallidos con `django-axes` (Nota: Si necesita desbloquear un usuario manualmente, use el comando de administración de Axes: python manage.py axes_reset).
 
 2. **Publicación y Moderación de Recetas**:
    - Publicación de recetas con fotos, ingredientes y categorías (Desayunos, Comidas, Postres y Bebidas).
