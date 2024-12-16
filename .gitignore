@@ -23,12 +23,13 @@ local_settings.py
 */migrations/*.log
 
 # Media y archivos subidos
+cocina_con_nosotros/media/
 media/
+cocina_con_nosotros/profile_photos/
+profile_photos/
+cocina_con_nosotros/
+recipes/
 *.bak
-
-# Archivos estáticos generados
-staticfiles/
-static/
 
 # Archivos generados por IDEs
 .vscode/
