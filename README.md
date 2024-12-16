@@ -52,7 +52,32 @@ Sigue estos pasos para configurar el proyecto:
    ```
    Si alguna dependencia no se instala correctamente, hazlo manualmente.
 
-5. Inicia el servidor:
+5. Configura PostgreSQL:
+   1. Descarga e instala PostgreSQL desde [https://www.postgresql.org/download/](https://www.postgresql.org/download/).
+   2. Crea una base de datos para el proyecto:
+      ```sql
+      CREATE DATABASE cocina_con_nosotros;
+      ```
+   3. Configura las credenciales de la base de datos en el archivo `settings.py`:
+      ```python
+      DATABASES = {
+          'default': {
+              'ENGINE': 'django.db.backends.postgresql',
+              'NAME': 'cocina_con_nosotros',
+              'USER': 'tu_usuario',
+              'PASSWORD': 'tu_contraseña',
+              'HOST': 'localhost',
+              'PORT': '5432',
+          }
+      }
+      ```
+   4. Aplica las migraciones:
+      ```bash
+      python manage.py makemigrations
+      python manage.py migrate
+      ```
+
+6. Inicia el servidor:
    ```bash
    python manage.py runserver
    ```
@@ -60,7 +85,7 @@ Sigue estos pasos para configurar el proyecto:
    ```bash
    python manage.py runsslserver
    ```
-6. Accede desde tu navegador:
+7. Accede desde tu navegador:
    - [http://127.0.0.1:8000/](http://127.0.0.1:8000/) (HTTP)
    - [https://127.0.0.1:8000/](https://127.0.0.1:8000/) (HTTPS)
 
@@ -93,8 +118,9 @@ El proyecto cumple con los **requisitos del Reglamento 128/2019**:
 - **django-allauth** (OAuth)
 - **django-allauth[socialaccount]**
 - **django-axes** (bloqueo de usuarios)
-- **DataTable JS**, **SweetAlert2**, **iziToast**, **Bootstrap** y **jQuery** (Frontend).
 - **Pillow**
+- **PostgreSQL**
+- **DataTable JS**, **SweetAlert2**, **iziToast**, **Bootstrap** y **jQuery** (Frontend).
 
 ## Autores
 - **Kevin Patterson** - [@KevPatterson](https://github.com/KevPatterson)
