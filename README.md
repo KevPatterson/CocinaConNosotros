@@ -7,7 +7,8 @@ Cuenta con roles de usuario y moderador:
 - **Usuarios**: Pueden visualizar, comentar y valorar recetas.
 - **Moderadores**: Aprueban recetas y gestionan usuarios que incumplan las normas.
 
-El sistema está implementado utilizando **Django** como framework backend y cumple con los requisitos de seguridad del Reglamento 128/2019 del MINCOM.
+El sistema está implementado utilizando **Django** como framework backend y cumple con los requisitos de seguridad del Reglamento 128/2019 del MINCOM. Además incluye la utilización de Bootstrap y Jquery como frameworks frontend, Sweet Alert2 e iziToast para notificaciones y alertas y DataTable Js para tablas dinámicas.
+Nota: Se utilizó una metodología SCRUM para el desarrollo del mismo con el apoyo de la plataforma Notion.
 
 ## Funcionalidades Principales
 1. **Gestión de Usuarios**:
