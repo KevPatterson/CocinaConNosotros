@@ -152,3 +152,13 @@ class Profile(models.Model):
 
     def str(self):
         return self.user.username
+
+# Modelo para la configuración de seguridad (Axes)
+class SecuritySettings(models.Model):
+    failure_limit = models.IntegerField(
+        default=5,
+        help_text="Número máximo de intentos fallidos de acceso"
+    )
+
+    def __str__(self):
+        return f"Configuración de Seguridad: {self.failure_limit} intentos"

@@ -15,6 +15,8 @@ import os
 from decouple import config
 from django.contrib.messages import constants as messages
 from django.contrib.messages import constants as message_constants
+from django.core.cache import cache
+#from tasks.models import SecuritySettings
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -214,6 +216,17 @@ AXES_NEVER_LOCKOUT = [ # Lista de IPs que nunca se bloquearán
     '127.0.0.1',  # IP local (localhost)
     '::1',  # IPv6 localhost
 ]
+
+# Obtener el valor de intentos fallidos desde la base de datos
+try:
+    security_settings = cache.get("failure_limit")
+    if not security_settings:
+        security_settings = SecuritySettings.objects.first()
+        if security_settings:
+            cache.set("failure_limit", security_settings.failure_limit, 300)  # Cachear por 5 minutos
+    AXES_FAILURE_LIMIT = security_settings.failure_limit if security_settings else 5
+except:
+    AXES_FAILURE_LIMIT = 5  # Valor por defecto en caso de error
 
 # Para bloqueo de IPs detrás de un proxy inverso o un balanceador de carga (Nginx, Apache, etc.)
 # Utilizar en producción
