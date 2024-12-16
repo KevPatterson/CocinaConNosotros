@@ -29,12 +29,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('DJANGO_SECRET_KEY', default='fallback-secret-key-for-local-development') # LLave secreta para la aplicación
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DJANGO_DEBUG', default=True, cast=bool) # Modo de depuración
+#DEBUG = config('DJANGO_DEBUG', default=True, cast=bool) # Modo de depuración
 ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOSTS', default='', cast=lambda v: v.split(',')) # # Lista de hosts permitidos
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['cocinaconnosotros.pythonanywhere.com']
 
 # ALLOWED_HOSTS = ['192.168.1.100'] # Para usar en producción (IP pública)
-#DEBUG = False # Deshabilitar en el modo de producción
+DEBUG = True # Deshabilitar en el modo de producción
 
 # Application definition
 INSTALLED_APPS = [
@@ -49,13 +49,12 @@ INSTALLED_APPS = [
     'sslserver',
     'axes',
     'auditlog',
-    'password_policies',
     'django_password_history',
     'django.contrib.sites',
 ]
 
 # Allauth
-INSTALLED_APPS += [ 
+INSTALLED_APPS += [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -90,7 +89,6 @@ MIDDLEWARE = [
 ]
 
 MIDDLEWARE += [
-    'password_policies.middleware.PasswordChangeMiddleware',
     #'django_otp.middleware.OTPMiddleware',  # Middleware para MFA
 ]
 
@@ -119,12 +117,12 @@ WSGI_APPLICATION = 'djangocrud.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'B_D',
-        'USER': 'postgres',
-        'PASSWORD': 'admin',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'CocinaConNosotro$default',
+        'USER': 'CocinaConNosotro',
+        'PASSWORD': 'Asere@1234',
+        'HOST': 'CocinaConNosotros.mysql.pythonanywhere-services.com',
+        'PORT': '3306',
     }
 }
 
@@ -155,11 +153,11 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
     # Validación de complejidad personalizada: combinación de mayúsculas, minúsculas, números y caracteres especiales
-    
+
     # Prohibición de reutilización de contraseñas recientes
-    
+
     # Caducidad de la contraseña
-    
+
     # Prohibición de patrones repetidos en contraseñas
 ]
 
@@ -169,10 +167,10 @@ AUTH_PASSWORD_VALIDATORS = [
 PASSWORD_HISTORY_COUNT = 24 # Número de contraseñas que se almacenan en el historial
 PASSWORD_MIN_LENGTH = 8  # Mínimo número de caracteres en una contraseña
 PASSWORD_COMPLEXITY = {  # Politicas de complejidad de la contraseña
-    'UPPER': 1,  # 
-    'LOWER': 1,  # 
-    'DIGITS': 1,  # 
-    'SPECIAL': 1,  # 
+    'UPPER': 1,  #
+    'LOWER': 1,  #
+    'DIGITS': 1,  #
+    'SPECIAL': 1,  #
 }
 PASSWORD_EXPIRY_DAYS = 90  # Tiempo (en días) que una contraseña es válida antes de requerir cambio (opcional)
 PASSWORD_CHANGE_ON_FIRST_LOGIN = True  # Cambiar la contraseña al primer inicio de sesión
@@ -280,7 +278,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 # Static and media files
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
