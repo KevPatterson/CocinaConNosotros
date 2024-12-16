@@ -1,4 +1,56 @@
 venv
-__pycache__
+.venv/
+__pycache__/
 db.sqlite3
-.env
+*.pyc
+*.env
+*.log
+*.pot
+local_settings.py
+
+# Archivos sensibles
+*.crt
+*.key
+
+# Archivos de compilación
+*.py[co]
+.DS_Store
+
+# Migraciones innecesarias
+*/migrations/__pycache__/
+*/migrations/*.pyc
+*/migrations/*.pyo
+*/migrations/*.log
+
+# Media y archivos subidos
+media/
+*.bak
+
+# Archivos estáticos generados
+staticfiles/
+static/
+
+# Archivos generados por IDEs
+.vscode/
+.idea/
+*.iml
+
+# Dependencias instaladas
+node_modules/
+pip-log.txt
+
+# Logs
+logs/
+*.log
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Archivos de PostgreSQL
+*.sql
+*.pg_dump
+
+# Otros archivos temporales
+*.swp
+*.tmp
+*.~*
