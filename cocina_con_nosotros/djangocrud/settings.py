@@ -199,11 +199,26 @@ AXES_FAILURE_LIMIT = 5  # Número máximo de intentos fallidos antes de bloquear
 AXES_COOLOFF_TIME = 1  # Tiempo en horas antes de restablecer los intentos fallidos (1 hora de enfriamiento)
 AXES_LOCKOUT_TEMPLATE = 'lockout.html'  # Plantilla personalizada para mostrar al usuario bloqueado
 AXES_USE_USER_AGENT = True  # Considera el agente de usuario como parte de los intentos
-AXES_ONLY_USER_FAILURES = True  # Monitorea solo fallos de inicio de sesión por usuario (Bloquea x usuario, no x IP)
+#AXES_ONLY_USER_FAILURES = True  # Monitorea solo fallos de inicio de sesión por usuario (Bloquea x usuario, no x IP)
 AXES_USERNAME_FORM_FIELD = 'username'  # Campo de formulario del nombre de usuario
 AXES_IP_WHITELIST = ['127.0.0.1']  # Lista blanca de IPs que no serán bloqueadas
 AXES_RESET_ON_SUCCESS = True  # Restablecer el contador tras un inicio exitoso
 AXES_LOCK_OUT_AT_FAILURE = True  # Bloquea al fallar el inicio de sesión
+
+# Configuraciones adicionales de django-axes para bloqueo de IP
+AXES_LOCK_OUT_BY_COMBINATION_USER_AND_IP = False  # Desactiva bloqueo combinado por usuario e IP
+AXES_ONLY_USER_FAILURES = False  # Permite bloquear la IP independientemente del usuario
+AXES_VERBOSE = True  # Mostrar mensajes de bloqueo en la consola de desarrollo
+
+AXES_NEVER_LOCKOUT = [ # Lista de IPs que nunca se bloquearán
+    '127.0.0.1',  # IP local (localhost)
+    '::1',  # IPv6 localhost
+]
+
+# Para bloqueo de IPs detrás de un proxy inverso o un balanceador de carga (Nginx, Apache, etc.)
+# Utilizar en producción
+#AXES_BEHIND_REVERSE_PROXY = True
+#AXES_REVERSE_PROXY_HEADER = 'HTTP_X_FORWARDED_FOR'
 
 # Definir el ID del sitio (para la autenticación de Google)
 SITE_ID = 2
