@@ -31,7 +31,7 @@ SECRET_KEY = config('DJANGO_SECRET_KEY', default='fallback-secret-key-for-local-
 # SECURITY WARNING: don't run with debug turned on in production!
 #DEBUG = config('DJANGO_DEBUG', default=True, cast=bool) # Modo de depuración
 ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOSTS', default='', cast=lambda v: v.split(',')) # # Lista de hosts permitidos
-ALLOWED_HOSTS = ['cocinaconnosotros.pythonanywhere.com']
+ALLOWED_HOSTS = ['cocinaconnosotros.pythonanywhere.com', '127.0.0.1']
 
 # ALLOWED_HOSTS = ['192.168.1.100'] # Para usar en producción (IP pública)
 DEBUG = True # Deshabilitar en el modo de producción
