@@ -94,7 +94,7 @@ Sigue estos pasos para configurar el proyecto:
    - [http://127.0.0.1:8000/](http://127.0.0.1:8000/) (HTTP)
    - [https://127.0.0.1:8000/](https://127.0.0.1:8000/) (HTTPS)
 
-### 🗝️ **Credenciales de Administrador:**
+### 🗝️ **Credenciales de Administrador:** **(Recuerda crear un super usuario en tu base de datos)**
 - **Usuario**: `admin@example.com`
 - **Contraseña**: `admin123`
 
