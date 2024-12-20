@@ -21,7 +21,7 @@ import json
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.http import JsonResponse
 from .models import Recipe, FavoriteRecipe, Ingredient, Comment, Rating
-from django.db.models import Avg, Q, Count  
+from django.db.models import Avg, Q, Count
 import random  # Importar random para seleccionar una receta aleatoria
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -83,7 +83,7 @@ def signin(request):
     else:
         user = authenticate(
             request, username=request.POST['username'], password=request.POST['password'])
-        
+
         if user is None:
             # Agrega un mensaje flash para SweetAlert2
             messages.error(request, "Nombre de usuario o contraseña incorrectos.")
@@ -197,6 +197,15 @@ def favorite_recipes(request):
     favorites = FavoriteRecipe.objects.filter(user=request.user).select_related('recipe')
     return render(request, 'favorite_recipes.html', {'favorites': favorites})
 
+@login_required
+@csrf_protect
+def recipe_delete(request, pk):
+    if request.method == "POST":
+        recipe = get_object_or_404(Recipe, pk=pk, author=request.user)
+        recipe.delete()
+        return JsonResponse({"success": True, "message": "Receta eliminada correctamente."})
+    return JsonResponse({"success": False, "message": "No tienes permisos para eliminar esta receta."}, status=400)
+
 @csrf_protect
 @login_required
 def force_password_change(request):
@@ -251,7 +260,7 @@ def create_recipe(request):
                         name=name.strip(),
                         quantity=quantity.strip()
                     )
-            
+
             # Añadir mensaje de éxito
             messages.success(request, f"La receta '{recipe.title}' fue creada exitosamente.")
             return redirect('dashboard')
@@ -295,7 +304,7 @@ def recipe_detail(request, recipe_id):
 
     comments = recipe.comments.filter(parent__isnull=True).prefetch_related('replies')  # Comentarios principales con sus respuestas
     ratings_data = recipe.ratings.aggregate(average_rating=Avg('rating'), total_ratings=Count('rating'))
-    
+
     return render(request, 'recipe_detail.html', {
         'recipe': recipe,
         'is_favorited': is_favorited,
@@ -310,7 +319,7 @@ from django.http import JsonResponse
 @login_required
 def rate_recipe(request, recipe_id):
     recipe = get_object_or_404(Recipe, id=recipe_id)
-    
+
     # Verificar si el usuario ya ha valorado esta receta
     existing_rating = Rating.objects.filter(recipe=recipe, user=request.user).first()
 
@@ -439,13 +448,11 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required, user_passes_test
 
 # Verificar si el usuario es administrador
-@csrf_protect
 def is_admin(user):
     return user.is_superuser
 
 CATEGORIES = ['Desayunos', 'Comidas', 'Bebidas', 'Postres']
 
-@csrf_protect
 @login_required
 @user_passes_test(is_admin)
 def admin_dashboard(request):
@@ -497,7 +504,7 @@ def manage_users(request):
         ).order_by('-date_joined')
     else:
         users_list = User.objects.all().order_by('-date_joined')  # Ordenar por fecha de creación
-    
+
     # Paginación
     paginator = Paginator(users_list, 10)  # Mostrar 10 usuarios por página
     page_number = request.GET.get('page')
@@ -529,7 +536,7 @@ def manage_recipes(request):
         ).order_by('-created_at')
     else:
         recipes_list = Recipe.objects.all().order_by('-created_at')  # Ordenar por fecha de creación
-    
+
     # Paginación
     paginator = Paginator(recipes_list, 10)  # Mostrar 10 recetas por página
     page_number = request.GET.get('page')
@@ -597,8 +604,8 @@ def auditlog_view(request):
     # Filtro de búsqueda
     if query:
         logs = logs.filter(
-            Q(actor__username__icontains=query) | 
-            Q(action__icontains=query) | 
+            Q(actor__username__icontains=query) |
+            Q(action__icontains=query) |
             Q(content_type__model__icontains=query)
         )
 
@@ -674,7 +681,7 @@ from django.contrib.auth.decorators import login_required
 def protected_media(request, path):
     # Construir la ruta completa del archivo
     file_path = os.path.join(settings.MEDIA_ROOT, path)
-    
+
     if os.path.exists(file_path):
         with open(file_path, 'rb') as f:
             response = HttpResponse(f.read(), content_type="application/octet-stream")

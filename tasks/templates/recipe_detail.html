@@ -7,12 +7,12 @@
     <!-- Foto de la receta -->
     <div class="position-relative">
       {% if recipe.photo %}
-        <img src="{{ recipe.photo.url }}" 
-             alt="{{ recipe.title }}" 
-             class="w-100" 
+        <img src="{{ recipe.photo.url }}"
+             alt="{{ recipe.title }}"
+             class="w-100"
              style="height: 250px; object-fit: cover;">
       {% else %}
-        <div class="d-flex justify-content-center align-items-center bg-light" 
+        <div class="d-flex justify-content-center align-items-center bg-light"
              style="height: 250px; font-size: 1.5rem; color: #6c757d;">
           Sin Imagen
         </div>
@@ -24,45 +24,43 @@
       <h3 class="card-title fw-bold text-primary">{{ recipe.title }}</h3>
       <p class="text-muted mb-2">{{ recipe.category }}</p>
       <p class="card-text text-muted">{{ recipe.description }}</p>
-      <p class="card-text text-muted">{{ recipe.preparation }}</p>
 
-      <!-- Botón para manejar favoritos -->
+      <!-- Botón Favoritos -->
       <button id="favorite-btn" class="btn {% if is_favorited %}btn-danger{% else %}btn-outline-danger{% endif %} mt-3" data-recipe-id="{{ recipe.id }}">
         {% if is_favorited %}
-        <i class="bi bi-heart-fill"></i> Quitar de Favoritos
+          <i class="bi bi-heart-fill"></i> Quitar de Favoritos
         {% else %}
-        <i class="bi bi-heart"></i> Añadir a Favoritos
+          <i class="bi bi-heart"></i> Añadir a Favoritos
         {% endif %}
       </button>
 
-      <!-- Detalles adicionales -->
-      <div class="d-flex justify-content-between align-items-center mt-4">
-        <div class="d-flex align-items-center">
+      <!-- Detalles adicionales (Responsive) -->
+      <div class="row text-center mt-4">
+        <div class="col-6 col-md-3 mb-2 d-flex align-items-center justify-content-center">
           <i class="bi bi-person-fill text-primary me-2"></i>
           <span>{{ recipe.servings }} persona(s)</span>
         </div>
-        <div class="d-flex align-items-center">
+        <div class="col-6 col-md-3 mb-2 d-flex align-items-center justify-content-center">
           <i class="bi bi-clock text-primary me-2"></i>
           <span>{{ recipe.preparation_time }} min</span>
         </div>
-        <div class="d-flex align-items-center">
+        <div class="col-6 col-md-3 mb-2 d-flex align-items-center justify-content-center">
           <i class="bi bi-bar-chart text-primary me-2"></i>
           <span>{{ recipe.get_difficulty_display }}</span>
         </div>
-        <div class="d-flex align-items-center">
-        <!-- Valoración de la receta -->
+        <div class="col-6 col-md-3 mb-2 d-flex align-items-center justify-content-center">
           <i class="bi bi-star-fill text-warning me-2"></i>
           <span>{{ average_rating }} / 5</span>
           {% if total_ratings > 0 %}
-            <small class="text-muted ms-2">({{ total_ratings }} valoraciones)</small>
+            <small class="text-muted ms-1">({{ total_ratings }} valoraciones)</small>
           {% else %}
-            <small class="text-muted ms-2">(Sin valoraciones)</small>
+            <small class="text-muted ms-1">(Sin valoraciones)</small>
           {% endif %}
         </div>
-      </div><br>
+      </div>
 
       <!-- Ingredientes -->
-      <h5>Ingredientes:</h5>
+      <h5 class="mt-4">Ingredientes:</h5>
       <ul class="list-unstyled">
         {% for ingredient in recipe.ingredients.all %}
           <li><i class="bi bi-check-circle text-success me-2"></i>{{ ingredient.quantity }} de {{ ingredient.name }}</li>
@@ -70,6 +68,7 @@
       </ul>
     </div>
   </div>
+</div>
 
   <!-- Sección de Comentarios -->
   <div class="card shadow-sm mb-5">
@@ -82,9 +81,9 @@
           {% for comment in comments %}
             <li class="mb-4">
               <div class="d-flex align-items-start">
-                <img src="{% if comment.user.profile.photo %}{{ comment.user.profile.photo.url }}{% else %}{% static 'images/default-user.png' %}{% endif %}" 
-                     alt="{{ comment.user.username }}" 
-                     class="rounded-circle me-3" 
+                <img src="{% if comment.user.profile.photo %}{{ comment.user.profile.photo.url }}{% else %}{% static 'images/default-user.png' %}{% endif %}"
+                     alt="{{ comment.user.username }}"
+                     class="rounded-circle me-3"
                      style="width: 50px; height: 50px; object-fit: cover;">
                 <div>
                   <h6 class="mb-1">{{ comment.user.username }}</h6>
@@ -96,23 +95,23 @@
                   </button>
                 </div>
               </div>
-  
+
               <!-- Recuadro de respuesta -->
               <div class="reply-box mt-3 ms-5 d-none" id="reply-box-{{ comment.id }}">
                 <textarea class="form-control mb-2" placeholder="Escribe tu respuesta..." rows="2"></textarea>
                 <button class="btn btn-primary btn-sm submit-reply" data-comment-id="{{ comment.id }}">Enviar</button>
                 <button class="btn btn-link text-danger cancel-reply" data-comment-id="{{ comment.id }}">Cancelar</button>
               </div>
-  
+
               <!-- Respuestas -->
               {% if comment.replies.exists %}
                 <ul class="list-unstyled ms-5 mt-3">
                   {% for reply in comment.replies.all %}
                     <li class="mb-3">
                       <div class="d-flex align-items-start">
-                        <img src="{% if reply.user.profile.photo %}{{ reply.user.profile.photo.url }}{% else %}{% static 'images/default-user.png' %}{% endif %}" 
-                             alt="{{ reply.user.username }}" 
-                             class="rounded-circle me-3" 
+                        <img src="{% if reply.user.profile.photo %}{{ reply.user.profile.photo.url }}{% else %}{% static 'images/default-user.png' %}{% endif %}"
+                             alt="{{ reply.user.username }}"
+                             class="rounded-circle me-3"
                              style="width: 40px; height: 40px; object-fit: cover;">
                         <div>
                           <h6 class="mb-1">{{ reply.user.username }}</h6>
@@ -131,11 +130,11 @@
         <p class="text-muted">No hay comentarios. ¡Sé el primero en comentar!</p>
       {% endif %}
     </div>
-  
+
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const favoriteButton = document.getElementById('favorite-btn');
-    
+
       if (favoriteButton) {
         favoriteButton.addEventListener('click', function () {
           const recipeId = this.dataset.recipeId;
@@ -143,7 +142,7 @@
           const url = isFavorited
             ? `/favorites/remove/${recipeId}/`
             : `/favorites/add/${recipeId}/`;
-    
+
           fetch(url, {
             method: 'GET',
             headers: {
@@ -158,7 +157,7 @@
                   message: data.message,
                   position: 'topRight',
                 });
-    
+
                 // Cambiar el estado del botón
                 this.classList.toggle('btn-danger');
                 this.classList.toggle('btn-outline-danger');
@@ -192,7 +191,7 @@
           document.getElementById(`reply-box-${commentId}`).classList.remove('d-none');
         });
       });
-  
+
       // Cancelar respuesta
       document.querySelectorAll('.cancel-reply').forEach(button => {
         button.addEventListener('click', function () {
@@ -200,14 +199,14 @@
           document.getElementById(`reply-box-${commentId}`).classList.add('d-none');
         });
       });
-  
+
       // Enviar respuesta con fetch
       document.querySelectorAll('.submit-reply').forEach(button => {
         button.addEventListener('click', function () {
           const commentId = this.dataset.commentId;
           const replyBox = document.getElementById(`reply-box-${commentId}`);
           const content = replyBox.querySelector('textarea').value;
-  
+
           fetch(`/comments/reply/`, {
             method: 'POST',
             headers: {
@@ -227,12 +226,12 @@
             .catch(error => console.error('Error:', error));
         });
       });
-  
+
       // Enviar comentario principal con fetch
       document.getElementById('comment-form').addEventListener('submit', function (e) {
         e.preventDefault();
         const content = document.getElementById('comment-content').value;
-  
+
         fetch(`/comments/add/`, {
           method: 'POST',
           headers: {

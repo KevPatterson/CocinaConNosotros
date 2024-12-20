@@ -4,61 +4,64 @@
 {% block content %}
 <div class="container mt-5">
   <h1 class="text-center mb-4" style="color: #2b2e4a; font-weight: bold;">Libro de Recetas</h1>
-  <!-- Tabla para DataTables -->
-  <table id="recipeTable" class="table table-striped table-hover">
-    <thead>
-      <tr>
-        <th>Imagen</th>
-        <th>Título</th>
-        <th>Descripción</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for recipe in recipes %}
+
+  <!-- Contenedor responsivo para la tabla -->
+  <div class="table-responsive">
+    <table id="recipeTable" class="table table-striped table-hover">
+      <thead>
         <tr>
-          <!-- Imagen de la receta -->
-          <td>
-            {% if recipe.photo %}
-              <img src="{{ recipe.photo.url }}" class="img-thumbnail recipe-photo" alt="{{ recipe.title }}" style="max-width: 100px;">
-            {% else %}
-              <img src="{% static 'images/no-image.jpg' %}" class="img-thumbnail recipe-photo" alt="No hay imagen" style="max-width: 100px;">
-            {% endif %}
-          </td>
-          <!-- Título -->
-          <td>
-            <strong>{{ recipe.title }}</strong>
-          </td>
-          <!-- Descripción con popover -->
-          <td>
-            <span tabindex="0" role="button" class="text-truncate d-inline-block" style="max-width: 200px;" 
-              data-bs-toggle="popover" data-bs-trigger="focus" title="{{ recipe.title }}" 
-              data-bs-content="{{ recipe.description }}">
-              {{ recipe.description|truncatechars:50 }}
-            </span>
-          </td>
-          <!-- Acciones -->
-          <td>
-            <div class="d-flex justify-content-center gap-2">
-              <a href="{% url 'recipe_detail' recipe.id %}" class="btn btn-outline-primary btn-sm" title="Ver receta">
-                <i class="bi bi-eye"></i>
-              </a>
-              <a href="{% url 'recipe_rate' recipe.id %}" class="btn btn-outline-warning btn-sm" title="Valorar">
-                <i class="bi bi-star"></i>
-              </a>
-              <a href="{% url 'recipe_comment' recipe.id %}" class="btn btn-outline-info btn-sm" title="Comentar">
-                <i class="bi bi-chat-dots"></i>
-              </a>
-            </div>
-          </td>
+          <th>Imagen</th>
+          <th>Título</th>
+          <th>Descripción</th>
+          <th>Acciones</th>
         </tr>
-      {% empty %}
-        <tr>
-          <td colspan="4" class="text-center text-muted">No hay recetas disponibles.</td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        {% for recipe in recipes %}
+          <tr>
+            <!-- Imagen de la receta -->
+            <td>
+              {% if recipe.photo %}
+                <img src="{{ recipe.photo.url }}" class="img-thumbnail recipe-photo" alt="{{ recipe.title }}" style="max-width: 80px; height: auto;">
+              {% else %}
+                <img src="{% static 'images/no-image.jpg' %}" class="img-thumbnail recipe-photo" alt="No hay imagen" style="max-width: 80px; height: auto;">
+              {% endif %}
+            </td>
+            <!-- Título -->
+            <td>
+              <strong class="text-truncate d-inline-block" style="max-width: 120px;">{{ recipe.title }}</strong>
+            </td>
+            <!-- Descripción con popover -->
+            <td>
+              <span tabindex="0" role="button" class="text-truncate d-inline-block" style="max-width: 180px;"
+                data-bs-toggle="popover" data-bs-trigger="focus" title="{{ recipe.title }}" 
+                data-bs-content="{{ recipe.description }}">
+                {{ recipe.description|truncatechars:50 }}
+              </span>
+            </td>
+            <!-- Acciones -->
+            <td>
+              <div class="d-flex justify-content-center gap-1">
+                <a href="{% url 'recipe_detail' recipe.id %}" class="btn btn-outline-primary btn-sm" title="Ver receta">
+                  <i class="bi bi-eye"></i>
+                </a>
+                <a href="{% url 'recipe_rate' recipe.id %}" class="btn btn-outline-warning btn-sm" title="Valorar">
+                  <i class="bi bi-star"></i>
+                </a>
+                <a href="{% url 'recipe_comment' recipe.id %}" class="btn btn-outline-info btn-sm" title="Comentar">
+                  <i class="bi bi-chat-dots"></i>
+                </a>
+              </div>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="4" class="text-center text-muted">No hay recetas disponibles.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
 
 <!-- Incluye los scripts necesarios -->
@@ -91,17 +94,10 @@
       },
     });
 
-    // Inicializar todos los popovers
-    document.addEventListener('DOMContentLoaded', function () {
-      const popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
-      popoverTriggerList.map(function (popoverTriggerEl) {
-        return new bootstrap.Popover(popoverTriggerEl);
-      });
-    });
-
-    // Conecta el cuadro de búsqueda personalizado con DataTables
-    $('#searchBox').on('keyup', function () {
-      table.search(this.value).draw();
+    // Inicializar popovers
+    const popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+    popoverTriggerList.map(function (popoverTriggerEl) {
+      return new bootstrap.Popover(popoverTriggerEl);
     });
   });
 </script>

@@ -43,5 +43,6 @@ urlpatterns += [
     path('favorites/remove/<int:recipe_id>/', views.remove_from_favorites, name='remove_from_favorites'),
     path('media/<path:path>/', protected_media, name='protected_media'),
     path('accounts/', include('allauth.urls')),
-] 
+    path('recipe/delete/<int:pk>/', views.recipe_delete, name='recipe_delete'),
+]
 
