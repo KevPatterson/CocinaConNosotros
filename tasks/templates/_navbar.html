@@ -108,7 +108,11 @@
           <span>{{ user.username }}</span>
         </a>
         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-          <li><a class="dropdown-item" href="/dashboard"><i class="bi bi-house me-2"></i>Inicio</a></li>
+                <li>
+        <a class="dropdown-item" href="{% if user.is_superuser %}{% url 'admin_dashboard' %}{% else %}{% url 'dashboard' %}{% endif %}">
+          <i class="bi bi-house me-2"></i>Inicio
+        </a>
+      </li>
           <li><a class="dropdown-item" href="{% url 'user_profile' %}"><i class="bi bi-gear me-2"></i>Editar Perfil</a></li>
           <li><a class="dropdown-item" href="{% url 'change_password' %}"><i class="bi bi-shield-lock me-2"></i>Cambiar Contraseña</a></li>
           <li><hr class="dropdown-divider"></li>
